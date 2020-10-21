@@ -23,5 +23,13 @@
             <artifactId>number-matchers</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+
+        <!--third party -->
+
+        <dependency>
+            <groupId>io.reactivex.rxjava2</groupId>
+            <artifactId>rxjava</artifactId>
+        </dependency>
+
     </dependencies>
 </project>
