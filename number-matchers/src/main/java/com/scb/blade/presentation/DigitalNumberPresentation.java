@@ -6,4 +6,6 @@ import java.util.Map;
 
 public interface DigitalNumberPresentation {
     Map<DigitInput, Integer> getPresentation();
+
+    int getCellWidth();
 }

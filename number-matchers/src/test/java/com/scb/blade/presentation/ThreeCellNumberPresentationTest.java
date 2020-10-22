@@ -104,4 +104,10 @@ public class ThreeCellNumberPresentationTest {
         assertEquals(0, presentation.get(expectedDigitalInput).intValue());
     }
 
+    @Test
+    public void cellWidth() {
+        ThreeCellNumberPresentation threeCellNumberPresentation = new ThreeCellNumberPresentation();
+        assertEquals(3, threeCellNumberPresentation.getCellWidth());
+    }
+
 }

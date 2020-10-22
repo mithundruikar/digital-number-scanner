@@ -1,11 +1,13 @@
 package com.scb.blade.matcher;
 
+import com.scb.blade.presentation.NumberPresentationRepository;
 import com.scb.blade.presentation.ThreeCellNumberPresentation;
 import com.scb.blade.reader.buffer.model.DigitInput;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Optional;
 
 import static org.junit.Assert.*;
@@ -16,7 +18,7 @@ public class NumberMatcherTest {
 
     @Before
     public void setup() {
-        this.numberMatcher = new NumberMatcher(new ThreeCellNumberPresentation());
+        this.numberMatcher = new NumberMatcher(3, new NumberPresentationRepository(Collections.singletonList(new ThreeCellNumberPresentation())));
     }
 
 

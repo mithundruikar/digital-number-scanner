@@ -21,7 +21,7 @@ public class ThreeCellNumberPresentation implements DigitalNumberPresentation {
     private final Map<DigitInput, Integer> presentation;
 
     public ThreeCellNumberPresentation() {
-        HashMap<DigitInput, Integer> integerDigitInputHashMap = new HashMap<DigitInput, Integer>();
+        HashMap<DigitInput, Integer> integerDigitInputHashMap = new HashMap();
 
         integerDigitInputHashMap.put(DigitInput.builder().segments(Arrays.asList(LINE, SIDE_LINE, LINE)).build(), 0);
         integerDigitInputHashMap.put(DigitInput.builder().segments(Arrays.asList(EMPTY_LINE, RIGHT_LINE, RIGHT_LINE)).build(), 1);
@@ -39,5 +39,10 @@ public class ThreeCellNumberPresentation implements DigitalNumberPresentation {
 
     public Map<DigitInput, Integer> getPresentation() {
         return presentation;
+    }
+
+    @Override
+    public int getCellWidth() {
+        return 3;
     }
 }
