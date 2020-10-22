@@ -20,74 +20,64 @@ import static org.mockito.Mockito.*;
 public class NumberInputParserTest {
     @Mock
     private NumberMatcher numberMatcher;
+    @Mock
+    private NumberLineParserRules numberLineParserRules;
 
     private NumberInputParser numberInputParser;
-    private NumberLineParserRules numberLineParserRules;
+
 
     @Before
     public void setup() {
-        this.numberLineParserRules = new NumberLineParserRules(3, true);
         numberInputParser = new NumberInputParser(this.numberLineParserRules, numberMatcher);
     }
 
     @Test
     public void parseValidNumberLine() {
-        DigitInput digit1 = mock(DigitInput.class);
-        DigitInput digit2 = mock(DigitInput.class);
-        DigitInput digit3 = mock(DigitInput.class);
+        DigitInput digit1 = getDigitInput();
+        DigitInput digit2 = getDigitInput();
+        DigitInput digit3 = getDigitInput();
 
-        when(numberMatcher.getNumber(eq(digit1))).thenReturn(Optional.of(Integer.valueOf(1)));
-        when(numberMatcher.getNumber(eq(digit2))).thenReturn(Optional.of(Integer.valueOf(2)));
-        when(numberMatcher.getNumber(eq(digit3))).thenReturn(Optional.of(Integer.valueOf(3)));
+        when(numberMatcher.getNumber(same(digit1))).thenReturn(Optional.of(Integer.valueOf(1)));
+        when(numberMatcher.getNumber(same(digit2))).thenReturn(Optional.of(Integer.valueOf(2)));
+        when(numberMatcher.getNumber(same(digit3))).thenReturn(Optional.of(Integer.valueOf(3)));
+
+        when(this.numberLineParserRules.valid(any())).thenReturn(true);
 
         NumberLineInput numberLineInput = NumberLineInput.builder()
                 .digitInputs(Arrays.asList(digit1, digit2, digit3))
                 .build();
 
-        String parse = this.numberInputParser.parse(numberLineInput);
-        assertEquals("123", parse);
+        ParsingResult parsingResult = new ParsingResult(Arrays.asList(Optional.of(Integer.valueOf(1)),
+                Optional.of(Integer.valueOf(2)),
+                Optional.of(Integer.valueOf(3))), true);
+        assertEquals(parsingResult, this.numberInputParser.parse(numberLineInput));
     }
 
-    @Test
-    public void parseShortNumber() {
-        DigitInput digit1 = mock(DigitInput.class);
-        DigitInput digit2 = mock(DigitInput.class);
-
-        when(numberMatcher.getNumber(eq(digit1))).thenReturn(Optional.of(Integer.valueOf(1)));
-        when(numberMatcher.getNumber(eq(digit2))).thenReturn(Optional.of(Integer.valueOf(2)));
-
-        NumberLineInput numberLineInput = NumberLineInput.builder()
-                .digitInputs(Arrays.asList(digit1, digit2))
-                .build();
-
-        String parse = this.numberInputParser.parse(numberLineInput);
-        assertEquals("12ILL", parse);
-    }
 
     @Test
     public void parseInvalidNumber() {
-        DigitInput digit1 = mock(DigitInput.class);
-        DigitInput digit2 = mock(DigitInput.class);
-        DigitInput digit3 = mock(DigitInput.class);
+        DigitInput digit1 = getDigitInput();
+        DigitInput digit2 = getDigitInput();
+        DigitInput digit3 = getDigitInput();
 
-        when(numberMatcher.getNumber(eq(digit1))).thenReturn(Optional.of(Integer.valueOf(1)));
-        when(numberMatcher.getNumber(eq(digit2))).thenReturn(Optional.empty());
-        when(numberMatcher.getNumber(eq(digit3))).thenReturn(Optional.of(Integer.valueOf(3)));
+        when(numberMatcher.getNumber(same(digit1))).thenReturn(Optional.of(Integer.valueOf(1)));
+        when(numberMatcher.getNumber(same(digit2))).thenReturn(Optional.empty());
+        when(numberMatcher.getNumber(same(digit3))).thenReturn(Optional.of(Integer.valueOf(3)));
+
+        when(this.numberLineParserRules.valid(any())).thenReturn(false);
 
         NumberLineInput numberLineInput = NumberLineInput.builder()
                 .digitInputs(Arrays.asList(digit1, digit2, digit3))
                 .build();
 
-        String parse = this.numberInputParser.parse(numberLineInput);
-        assertEquals("1?3ILL", parse);
+        ParsingResult parsingResult = new ParsingResult(Arrays.asList(Optional.of(Integer.valueOf(1)),
+                Optional.empty(),
+                Optional.of(Integer.valueOf(3))), false);
+        assertEquals(parsingResult, this.numberInputParser.parse(numberLineInput));
     }
 
-    @Test
-    public void parseEmptyNumberLine() {
-        NumberLineInput numberLineInput = NumberLineInput.builder()
-                .build();
-
-        String parse = this.numberInputParser.parse(numberLineInput);
-        assertEquals("ILL", parse);
+    private DigitInput getDigitInput() {
+        return DigitInput.builder().build();
     }
+
 }
