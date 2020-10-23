@@ -1,17 +1,17 @@
 package com.scb.blade.parser;
 
 import com.scb.blade.config.NumberParserConfig;
+import com.scb.blade.parser.rules.NumberLineParserRules;
 import com.scb.blade.presentation.ThreeCellNumberPresentation;
 import com.scb.blade.reader.buffer.model.DigitInput;
 import com.scb.blade.reader.buffer.model.NumberLineInput;
-import io.reactivex.BackpressureStrategy;
-import io.reactivex.subjects.BehaviorSubject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import rx.subjects.BehaviorSubject;
 
 import java.util.*;
 
@@ -22,16 +22,18 @@ public class NumberParserTopologyIT {
     private NumberParserTopology numberParserTopology;
     @Autowired
     private ThreeCellNumberPresentation digitalNumberPresentation;
+    @Autowired
+    private NumberLineParserRules numberLineParserRules;
 
     @Test
     public void topology() {
         List<String> outputList = new ArrayList<>();
         BehaviorSubject<NumberLineInput> lineInputTopic = BehaviorSubject.create();
-        numberParserTopology.start(lineInputTopic.toFlowable(BackpressureStrategy.ERROR))
+        numberParserTopology.start(lineInputTopic.asObservable())
                 .doOnNext(outputList::add)
                 .subscribe();
 
-        lineInputTopic.onNext(NumberLineInput.builder()
+        lineInputTopic.onNext(NumberLineInput.builder(numberLineParserRules.getMaxDigits())
                 .digitInputs(Arrays.asList(getDigitalInput(1, digitalNumberPresentation), getDigitalInput(2, digitalNumberPresentation),
                         getDigitalInput(3, digitalNumberPresentation),
                         getDigitalInput(4, digitalNumberPresentation), getDigitalInput(5, digitalNumberPresentation),
@@ -40,12 +42,12 @@ public class NumberParserTopologyIT {
                         getDigitalInput(9, digitalNumberPresentation)))
                 .build());
 
-        lineInputTopic.onNext(NumberLineInput.builder()
+        lineInputTopic.onNext(NumberLineInput.builder(numberLineParserRules.getMaxDigits())
                 .digitInputs(Arrays.asList(getDigitalInput(2, digitalNumberPresentation), getDigitalInput(2, digitalNumberPresentation),
                         getDigitalInput(1, digitalNumberPresentation)))
                 .build());
 
-        lineInputTopic.onNext(NumberLineInput.builder()
+        lineInputTopic.onNext(NumberLineInput.builder(numberLineParserRules.getMaxDigits())
                 .digitInputs(Arrays.asList(getDigitalInput(1, digitalNumberPresentation), getDigitalInput(2, digitalNumberPresentation),
                         DigitInput.builder().build(),
                         getDigitalInput(4, digitalNumberPresentation), getDigitalInput(5, digitalNumberPresentation),

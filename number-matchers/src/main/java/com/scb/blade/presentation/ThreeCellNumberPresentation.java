@@ -10,20 +10,23 @@ import java.util.Map;
 import static com.scb.blade.reader.buffer.model.DigitSegmentInput.*;
 
 public class ThreeCellNumberPresentation implements DigitalNumberPresentation {
-    public static final DigitSegmentInput EMPTY_LINE = DigitSegmentInput.builder().chars(new char[] {WHITESPACE, WHITESPACE, WHITESPACE}).build();
-    public static final DigitSegmentInput LINE = DigitSegmentInput.builder().chars(new char[] {WHITESPACE, UNDERSCORE, WHITESPACE}).build();
-    public static final DigitSegmentInput RIGHT_LINE = DigitSegmentInput.builder().chars(new char[] {WHITESPACE, WHITESPACE, PIPE}).build();
-    public static final DigitSegmentInput SIDE_LINE = DigitSegmentInput.builder().chars(new char[] {PIPE, WHITESPACE, PIPE}).build();
-    public static final DigitSegmentInput CUP = DigitSegmentInput.builder().chars(new char[] {PIPE, UNDERSCORE, PIPE}).build();
-    public static final DigitSegmentInput LEFT_ANGLE = DigitSegmentInput.builder().chars(new char[] {PIPE, UNDERSCORE, WHITESPACE}).build();
-    public static final DigitSegmentInput RIGHT_ANGLE = DigitSegmentInput.builder().chars(new char[] {WHITESPACE, UNDERSCORE, PIPE}).build();
+    public static final int CELL_WIDTH = 3;
+
+    public static final DigitSegmentInput EMPTY_LINE = DigitSegmentInput.builder(CELL_WIDTH).chars(new char[] {WHITESPACE, WHITESPACE, WHITESPACE}).build();
+    public static final DigitSegmentInput LINE = DigitSegmentInput.builder(CELL_WIDTH).chars(new char[] {WHITESPACE, UNDERSCORE, WHITESPACE}).build();
+    public static final DigitSegmentInput RIGHT_LINE = DigitSegmentInput.builder(CELL_WIDTH).chars(new char[] {WHITESPACE, WHITESPACE, PIPE}).build();
+    public static final DigitSegmentInput SIDE_LINE = DigitSegmentInput.builder(CELL_WIDTH).chars(new char[] {PIPE, WHITESPACE, PIPE}).build();
+    public static final DigitSegmentInput CUP = DigitSegmentInput.builder(CELL_WIDTH).chars(new char[] {PIPE, UNDERSCORE, PIPE}).build();
+    public static final DigitSegmentInput LEFT_ANGLE = DigitSegmentInput.builder(CELL_WIDTH).chars(new char[] {PIPE, UNDERSCORE, WHITESPACE}).build();
+    public static final DigitSegmentInput RIGHT_ANGLE = DigitSegmentInput.builder(CELL_WIDTH).chars(new char[] {WHITESPACE, UNDERSCORE, PIPE}).build();
+
 
     private final Map<DigitInput, Integer> presentation;
 
     public ThreeCellNumberPresentation() {
         HashMap<DigitInput, Integer> integerDigitInputHashMap = new HashMap();
 
-        integerDigitInputHashMap.put(DigitInput.builder().segments(Arrays.asList(LINE, SIDE_LINE, LINE)).build(), 0);
+        integerDigitInputHashMap.put(DigitInput.builder().segments(Arrays.asList(LINE, SIDE_LINE, CUP)).build(), 0);
         integerDigitInputHashMap.put(DigitInput.builder().segments(Arrays.asList(EMPTY_LINE, RIGHT_LINE, RIGHT_LINE)).build(), 1);
         integerDigitInputHashMap.put(DigitInput.builder().segments(Arrays.asList(LINE, RIGHT_ANGLE, LEFT_ANGLE)).build(), 2);
         integerDigitInputHashMap.put(DigitInput.builder().segments(Arrays.asList(LINE, RIGHT_ANGLE, RIGHT_ANGLE)).build(), 3);
@@ -43,6 +46,6 @@ public class ThreeCellNumberPresentation implements DigitalNumberPresentation {
 
     @Override
     public int getCellWidth() {
-        return 3;
+        return CELL_WIDTH;
     }
 }

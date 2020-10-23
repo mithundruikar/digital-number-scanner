@@ -100,7 +100,7 @@ public class ThreeCellNumberPresentationTest {
     public void numberZeroPresentation() {
         ThreeCellNumberPresentation threeCellNumberPresentation = new ThreeCellNumberPresentation();
         Map<DigitInput, Integer> presentation = threeCellNumberPresentation.getPresentation();
-        DigitInput expectedDigitalInput = DigitInput.builder().segments(Arrays.asList(LINE, SIDE_LINE, LINE)).build();
+        DigitInput expectedDigitalInput = DigitInput.builder().segments(Arrays.asList(LINE, SIDE_LINE, CUP)).build();
         assertEquals(0, presentation.get(expectedDigitalInput).intValue());
     }
 

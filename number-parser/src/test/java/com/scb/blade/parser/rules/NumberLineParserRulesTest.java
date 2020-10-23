@@ -19,7 +19,7 @@ public class NumberLineParserRulesTest {
         DigitInput digit2 = getDigitInput();
         DigitInput digit3 = getDigitInput();
 
-        NumberLineInput numberLineInput = NumberLineInput.builder()
+        NumberLineInput numberLineInput = NumberLineInput.builder(numberLineParserRules.getMaxDigits())
                 .digitInputs(Arrays.asList(digit1, digit2, digit3))
                 .build();
 
@@ -32,7 +32,7 @@ public class NumberLineParserRulesTest {
         DigitInput digit1 = getDigitInput();
         DigitInput digit2 = getDigitInput();
 
-        NumberLineInput numberLineInput = NumberLineInput.builder()
+        NumberLineInput numberLineInput = NumberLineInput.builder(numberLineParserRules.getMaxDigits())
                 .digitInputs(Arrays.asList(digit1, digit2))
                 .build();
 
@@ -45,7 +45,7 @@ public class NumberLineParserRulesTest {
         DigitInput digit1 = getDigitInput();
         DigitInput digit2 = getDigitInput();
 
-        NumberLineInput numberLineInput = NumberLineInput.builder()
+        NumberLineInput numberLineInput = NumberLineInput.builder(numberLineParserRules.getMaxDigits())
                 .digitInputs(Arrays.asList(digit1, digit2, getDigitInput(), getDigitInput()))
                 .build();
 
@@ -58,7 +58,7 @@ public class NumberLineParserRulesTest {
         DigitInput digit1 = getDigitInput();
         DigitInput digit2 = getDigitInput();
 
-        NumberLineInput numberLineInput = NumberLineInput.builder()
+        NumberLineInput numberLineInput = NumberLineInput.builder(numberLineParserRules.getMaxDigits())
                 .digitInputs(Arrays.asList(digit1, digit2, getDigitInput(), getDigitInput()))
                 .build();
 
@@ -69,7 +69,7 @@ public class NumberLineParserRulesTest {
     @Test
     public void noDigits() {
         NumberLineParserRules numberLineParserRules = new NumberLineParserRules(3, false);
-        NumberLineInput numberLineInput = NumberLineInput.builder()
+        NumberLineInput numberLineInput = NumberLineInput.builder(numberLineParserRules.getMaxDigits())
                 .digitInputs(Collections.emptyList())
                 .build();
         assertFalse(numberLineParserRules.valid(numberLineInput));

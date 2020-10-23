@@ -18,6 +18,9 @@ public class NumberLineParserRules {
         if(!isVariableLength() && inputDigitsLength != getMaxDigits() ) {
             return false;
         }
+        if(numberLineInput.isNumberLineTrimmed()) {
+            return false;
+        }
         return true;
     }
 }

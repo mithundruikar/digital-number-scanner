@@ -43,7 +43,7 @@ public class NumberInputParserTest {
 
         when(this.numberLineParserRules.valid(any())).thenReturn(true);
 
-        NumberLineInput numberLineInput = NumberLineInput.builder()
+        NumberLineInput numberLineInput = NumberLineInput.builder(3)
                 .digitInputs(Arrays.asList(digit1, digit2, digit3))
                 .build();
 
@@ -66,7 +66,7 @@ public class NumberInputParserTest {
 
         when(this.numberLineParserRules.valid(any())).thenReturn(false);
 
-        NumberLineInput numberLineInput = NumberLineInput.builder()
+        NumberLineInput numberLineInput = NumberLineInput.builder(3)
                 .digitInputs(Arrays.asList(digit1, digit2, digit3))
                 .build();
 

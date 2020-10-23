@@ -19,10 +19,14 @@ public class NumberParserConfig {
     @Value("${digital.number.scanner.input.digits.perline:9}")
     private int digitsPerLine;
 
+    @Bean
+    public NumberLineParserRules numberLineParserRules() {
+        return new NumberLineParserRules(digitsPerLine, false);
+    }
 
     @Bean
-    public NumberInputParser numberInputParser(NumberMatcher numberMatcher) {
-        return new NumberInputParser(new NumberLineParserRules(digitsPerLine, false), numberMatcher);
+    public NumberInputParser numberInputParser(NumberMatcher numberMatcher, NumberLineParserRules numberLineParserRules) {
+        return new NumberInputParser(numberLineParserRules, numberMatcher);
     }
 
     @Bean

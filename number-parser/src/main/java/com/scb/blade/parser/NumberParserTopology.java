@@ -3,7 +3,7 @@ package com.scb.blade.parser;
 import com.scb.blade.number.sink.NumberOutputSink;
 import com.scb.blade.number.sink.SinkFormatter;
 import com.scb.blade.reader.buffer.model.NumberLineInput;
-import io.reactivex.Flowable;
+import rx.Observable;
 
 
 public class NumberParserTopology {
@@ -19,7 +19,7 @@ public class NumberParserTopology {
         this.sinkFormatter = sinkFormatter;
     }
 
-    public Flowable<String> start(Flowable<NumberLineInput> lineInputFlowable) {
+    public Observable<String> start(Observable<NumberLineInput> lineInputFlowable) {
         return lineInputFlowable.map(numberInputParser::parse)
                 .map(sinkFormatter::format)
                 .doOnNext(numberOutputSink::consume);
