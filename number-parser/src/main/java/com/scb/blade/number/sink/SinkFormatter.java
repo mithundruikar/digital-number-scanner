@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * It formats incoming input line into required format of string represetation
+ */
 public class SinkFormatter {
     public static final String INVALID_NUMBER_PLACEHOLDER = "?";
     public static final String INVALID_NUMBER_LINE_SUFFIX = "ILL";

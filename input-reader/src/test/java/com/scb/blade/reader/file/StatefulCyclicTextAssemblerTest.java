@@ -19,7 +19,7 @@ public class StatefulCyclicTextAssemblerTest {
 
     @Before
     public void setup() {
-        this.numberTextAssemblerRules = new NumberTextAssemblerRules(3, 2, false);
+        this.numberTextAssemblerRules = new NumberTextAssemblerRules(3, 2, 4, 2,false);
         this.statefulCyclicTextAssembler = new StatefulCyclicTextAssembler(numberTextAssemblerRules);
     }
 
@@ -131,6 +131,80 @@ public class StatefulCyclicTextAssemblerTest {
         assertEquals(from(Arrays.asList(oneLine1.substring(0, 3), oneLine2.substring(0, 3), oneLine3.substring(0, 3))), digitInputOne);
         assertEquals(from(Arrays.asList(oneLine1.charAt(3)+twoLine1.substring(0,2), oneLine2.charAt(3)+twoLine2.substring(0,2),
                 oneLine3.charAt(3)+twoLine3.substring(0,2))), digitInputTwo);
+    }
+
+
+    @Test(expected = IllegalStateException.class)
+    public void consumeMoreThanAllowedLines() {
+        this.numberTextAssemblerRules = new NumberTextAssemblerRules(3, 2, 2, 2,false);
+        this.statefulCyclicTextAssembler = new StatefulCyclicTextAssembler(numberTextAssemblerRules);
+
+        String oneLine1 = "   |";
+        String oneLine2 = "   |";
+        String oneLine3 = "   |";
+
+        String twoLine1 = " _ ";
+        String twoLine2 = "|_|";
+        String twoLine3 = "|_ ";
+
+        String endOfMessageLine = "      ";
+
+        this.statefulCyclicTextAssembler.init();
+
+        Optional<NumberLineInput> consume1 = this.statefulCyclicTextAssembler.consume(oneLine1 + twoLine1);
+        assertFalse(consume1.isPresent());
+        Optional<NumberLineInput> consume2 = this.statefulCyclicTextAssembler.consume(oneLine2 + twoLine2);
+        assertFalse(consume2.isPresent());
+        Optional<NumberLineInput> consume3 = this.statefulCyclicTextAssembler.consume(oneLine3 + twoLine3);
+        assertFalse(consume3.isPresent());
+        Optional<NumberLineInput> consume4 = this.statefulCyclicTextAssembler.consume(endOfMessageLine);
+        assertTrue(consume4.isPresent());
+
+        consume1 = this.statefulCyclicTextAssembler.consume(oneLine1 + twoLine1);
+        assertFalse(consume1.isPresent());
+        consume2 = this.statefulCyclicTextAssembler.consume(oneLine2 + twoLine2);
+        assertFalse(consume2.isPresent());
+        consume3 = this.statefulCyclicTextAssembler.consume(oneLine3 + twoLine3);
+        assertFalse(consume3.isPresent());
+        consume4 = this.statefulCyclicTextAssembler.consume(endOfMessageLine);
+        assertTrue(consume4.isPresent());
+
+
+        consume1 = this.statefulCyclicTextAssembler.consume(oneLine1 + twoLine1);
+        assertFalse(consume1.isPresent());
+    }
+
+
+    @Test(expected = IllegalStateException.class)
+    public void consumeEmptyLinesInARow() {
+        this.numberTextAssemblerRules = new NumberTextAssemblerRules(3, 2, 2, 2,false);
+        this.statefulCyclicTextAssembler = new StatefulCyclicTextAssembler(numberTextAssemblerRules);
+
+        String oneLine1 = "   |";
+        String oneLine2 = "   |";
+        String oneLine3 = "   |";
+
+        String twoLine1 = " _ ";
+        String twoLine2 = "|_|";
+        String twoLine3 = "|_ ";
+
+        String endOfMessageLine = "      ";
+
+        this.statefulCyclicTextAssembler.init();
+
+        Optional<NumberLineInput> consume1 = this.statefulCyclicTextAssembler.consume(oneLine1 + twoLine1);
+        assertFalse(consume1.isPresent());
+        Optional<NumberLineInput> consume2 = this.statefulCyclicTextAssembler.consume(oneLine2 + twoLine2);
+        assertFalse(consume2.isPresent());
+        Optional<NumberLineInput> consume3 = this.statefulCyclicTextAssembler.consume(oneLine3 + twoLine3);
+        assertFalse(consume3.isPresent());
+
+        Optional<NumberLineInput> consume4 = this.statefulCyclicTextAssembler.consume(endOfMessageLine);
+        assertTrue(consume4.isPresent());
+
+        this.statefulCyclicTextAssembler.consume(endOfMessageLine);
+        this.statefulCyclicTextAssembler.consume(endOfMessageLine);
+        this.statefulCyclicTextAssembler.consume(endOfMessageLine);
     }
 
 

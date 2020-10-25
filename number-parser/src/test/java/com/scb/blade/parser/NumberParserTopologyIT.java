@@ -1,6 +1,6 @@
 package com.scb.blade.parser;
 
-import com.scb.blade.config.NumberParserConfig;
+import com.scb.blade.parser.config.NumberParserTestConfig;
 import com.scb.blade.parser.rules.NumberLineParserRules;
 import com.scb.blade.presentation.ThreeCellNumberPresentation;
 import com.scb.blade.reader.buffer.model.DigitInput;
@@ -16,7 +16,7 @@ import rx.subjects.BehaviorSubject;
 import java.util.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {NumberParserConfig.class})
+@ContextConfiguration(classes = {NumberParserTestConfig.class})
 public class NumberParserTopologyIT {
     @Autowired
     private NumberParserTopology numberParserTopology;

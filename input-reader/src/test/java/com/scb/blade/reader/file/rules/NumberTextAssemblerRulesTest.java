@@ -8,7 +8,7 @@ public class NumberTextAssemblerRulesTest {
 
     @Test
     public void endOfMessage() {
-        NumberTextAssemblerRules numberTextAssemblerRules = new NumberTextAssemblerRules(3, 5, false);
+        NumberTextAssemblerRules numberTextAssemblerRules = new NumberTextAssemblerRules(3, 5, 4,4,false);
         assertTrue(numberTextAssemblerRules.endOfMessage(""));
 
         assertTrue(numberTextAssemblerRules.endOfMessage(null));
@@ -19,7 +19,7 @@ public class NumberTextAssemblerRulesTest {
 
     @Test
     public void noEndOfMessage() {
-        NumberTextAssemblerRules numberTextAssemblerRules = new NumberTextAssemblerRules(3, 5, false);
+        NumberTextAssemblerRules numberTextAssemblerRules = new NumberTextAssemblerRules(3, 5, 4,4,false);
         assertFalse(numberTextAssemblerRules.endOfMessage("ABC"));
         assertFalse(numberTextAssemblerRules.endOfMessage("1234"));
     }

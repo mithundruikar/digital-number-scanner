@@ -2,7 +2,7 @@ package com.scb.blade.config;
 
 import com.scb.blade.matcher.NumberMatcher;
 import com.scb.blade.matcher.config.NumberMatcherConfig;
-import com.scb.blade.number.sink.ConsoleOutputSink;
+import com.scb.blade.number.sink.NumberOutputSink;
 import com.scb.blade.number.sink.SinkFormatter;
 import com.scb.blade.parser.NumberInputParser;
 import com.scb.blade.parser.NumberParserTopology;
@@ -34,14 +34,10 @@ public class NumberParserConfig {
         return new SinkFormatter();
     }
 
-    @Bean
-    public ConsoleOutputSink consoleOutputSink() {
-        return new ConsoleOutputSink();
-    }
 
     @Bean
-    public NumberParserTopology numberParserTopology(NumberInputParser numberInputParser, ConsoleOutputSink consoleOutputSink,
+    public NumberParserTopology numberParserTopology(NumberInputParser numberInputParser, NumberOutputSink numberOutputSink,
                                                      SinkFormatter sinkFormatter) {
-        return new NumberParserTopology(numberInputParser, consoleOutputSink, sinkFormatter);
+        return new NumberParserTopology(numberInputParser, numberOutputSink, sinkFormatter);
     }
 }

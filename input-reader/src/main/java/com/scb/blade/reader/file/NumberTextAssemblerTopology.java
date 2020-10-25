@@ -11,16 +11,21 @@ import java.util.Optional;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
-public class NumberTextAssembler {
+/**
+ * Text assembler streaming topology definition.
+ * It accepts input file to scan and returns observable of {@link NumberLineInput}
+ * Each {@link NumberLineInput} maps to one number from input text file
+ */
+public class NumberTextAssemblerTopology {
     private StatefulCyclicTextAssembler statefulCyclicTextAssembler;
     private ScheduledExecutorService scheduledExecutorService;
 
-    public NumberTextAssembler(NumberTextAssemblerRules numberTextAssemblerRules) {
+    public NumberTextAssemblerTopology(NumberTextAssemblerRules numberTextAssemblerRules) {
         this.statefulCyclicTextAssembler = new StatefulCyclicTextAssembler(numberTextAssemblerRules);
         this.scheduledExecutorService = Executors.newScheduledThreadPool(1);
     }
 
-    public Observable<NumberLineInput> start(String filePath) {
+    public Observable<NumberLineInput> observe(String filePath) {
         this.statefulCyclicTextAssembler.init();
         ReplaySubject<NumberLineInput> lineInputTopic = ReplaySubject.create();
         Observable<NumberLineInput> numberLineInputFlowable = lineInputTopic.asObservable().serialize();
@@ -42,8 +47,9 @@ public class NumberTextAssembler {
                         lineInputTopic.onCompleted();
                     })
                     .subscribe();
-        } catch(IOException io){
-            io.printStackTrace();
+        } catch(IOException io) {
+            lineInputTopic.onError(io);
+
         }
     }
 

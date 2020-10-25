@@ -12,13 +12,21 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+/**
+ * Stateful assembler of input digit texts. It maintains a buffer of number line input assembled so far.
+ * it optionally  returns completed number line input upon end of message reception.
+ */
 public class StatefulCyclicTextAssembler {
     private NumberLineInput.NumberLineInputBuilder numberState;
     private NumberTextAssemblerRules numberTextAssemblerRules;
     private boolean empty;
+    private int bufferedLineCounter;
+    private int skippedEmptyLinesInaRow;
 
     public StatefulCyclicTextAssembler(NumberTextAssemblerRules numberTextAssemblerRules) {
         this.numberTextAssemblerRules = numberTextAssemblerRules;
+        this.bufferedLineCounter = 0;
+        this.skippedEmptyLinesInaRow = 0;
     }
 
     public void init() {
@@ -27,21 +35,33 @@ public class StatefulCyclicTextAssembler {
     }
 
     public Optional<NumberLineInput> consume(String line) {
-        if(numberTextAssemblerRules.endOfMessage(line) && !this.empty) {
+        boolean endMessage = numberTextAssemblerRules.endOfMessage(line);
+        if(endMessage && this.empty) {
+            if(this.skippedEmptyLinesInaRow++ >= numberTextAssemblerRules.getMaxEmptyLines()) {
+                throw new IllegalStateException("More than allowed empty lines observed. Ignoring further");
+            }
+        }
+        else if(endMessage) {
             Optional<NumberLineInput> state = Optional.of(numberState.build());
             init();
+            this.bufferedLineCounter++;
             return state;
         }
 
-        List<DigitSegmentInput> segmentInputs = getDigitSegmentInput(line);
+        if(!endMessage) {
+            if(this.bufferedLineCounter >= numberTextAssemblerRules.getMaxLines()) {
+                throw new IllegalStateException("More than allowed lines reached. Ignoring further");
+            }
 
-        IntStream.range(0, segmentInputs.size())
-                .boxed()
-                .forEach( index -> {
-                    this.empty = false;
-                    numberState.addDigitSegment(index, segmentInputs.get(index));
-                });
+            List<DigitSegmentInput> segmentInputs = getDigitSegmentInput(line);
 
+            IntStream.range(0, segmentInputs.size())
+                    .boxed()
+                    .forEach(index -> {
+                        this.empty = false;
+                        numberState.addDigitSegment(index, segmentInputs.get(index));
+                    });
+        }
         return Optional.empty();
     }
 
