@@ -1,3 +1,7 @@
+##PLEASE NOTE THIS DESIGN IS JUST TO DEMONSTRATE ONE WAY OF SEPARATION OF CONCERNS. IT IS VERY OBVIOUS THAT IT IS BIT OF OVER KILL FOR THIS SIMPLE PROBLEM.
+BUT IT IS NOT ABOUT SOLVING THIS PROBLEM. IT IS JUST TO DEMOSTRATE/SHARE CONCEPTS. 
+PARSING DIGITAL NUMBER TO THEIR NUMBER STRING IS NOT ONLY GOAL. THAT CAN BE DONE WITH VERY SIMPLE APP.
+
 ## Summary
 This is a digital number scanner. Input will be a path to a file containing LCD style numbers. Output will be a numbers matching the LCD representation.
 e.g.
@@ -34,10 +38,6 @@ Application module contains application.properties with supported application pr
 
 ## Design
 At high Level, I have separated the problem into 3 parts. These are parts are joined in streaming topology to achieve an event driven application flow.
-
-PLEASE NOTE THIS DESIGN IS JUST TO DEMONSTRATE ONE WAY OF SEPARATION OF CONCERNS. IT IS VERY OBVIOUS THAT IT IS BIT OF OVER KILL FOR THIS SIMPLE PROBLEM.
-BUT IT IS NOT ABOUT SOLVING THIS PROBLEM. IT IS JUST TO DEMOSTRATE/SHARE CONCEPTS. 
-PARSING DIGITAL NUMBER TO THEIR NUMBER STRING IS NOT ONLY GOAL. THAT CAN BE DONE WITH VERY SIMPLE APP.
 
 **input-reader -**<br> which reads input from the file and emits representation of file inputs in some internal Model (number Buffers) <br>
 **number-matchers -**<br> Contains grammar and representation-to-number mappings<br>
